@@ -1,0 +1,28 @@
+# for c/c++
+build/*
+*CMakeFiles*
+.vscode
+.build
+build
+build_doc
+/output
+.idea
+*.iml
+.sln
+*.swp
+.DS_Store
+.gradle
+.tmp
+*.tmp
+cmake-build-*
+
+# for python
+*.py[cod]
+*.egg
+*.egg-info
+dist
+
+# for Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
