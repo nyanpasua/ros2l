@@ -16,6 +16,12 @@ ament_target_dependencies(server
 add_executable(client src/add_two_ints_client.cpp)
 ament_target_dependencies(client
         rclcpp tutorial_interfaces)
+
+add_executable(talker src/publisher_member_function.cpp)
+ament_target_dependencies(talker rclcpp tutorial_interfaces)    # CHANGE
+
+add_executable(listener src/subscriber_member_function.cpp)
+ament_target_dependencies(listener rclcpp tutorial_interfaces)  # CHANGE
 if (BUILD_TESTING)
     find_package(ament_lint_auto REQUIRED)
     # the following line skips the linter which checks for copyrights
@@ -30,6 +36,8 @@ endif ()
 install(TARGETS
         server
         client
+        talker
+        listener
         DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

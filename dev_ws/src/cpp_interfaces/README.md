@@ -18,6 +18,8 @@ colcon build --packages-select cpp_interfaces
 ```asm
 . install/setup.bash
 ros2 run cpp_interfaces server
+ros2 run cpp_pubsub listener
 . install/setup.bash
 ros2 run cpp_interfaces client 2 3
+ros2 run cpp_pubsub talker
 ```
