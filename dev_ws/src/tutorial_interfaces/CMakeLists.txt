@@ -4,7 +4,7 @@ project(tutorial_interfaces)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
-
+include(extern_dep.cmake)
 # find dependencies
 find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
@@ -16,6 +16,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}
         "msg/Num.msg"
         "srv/AddThreeInts.srv"
         )
+
+add_executable(api_test src/api_test.cpp)
+target_link_libraries(api_test opencv_world)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
