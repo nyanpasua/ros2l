@@ -43,9 +43,15 @@ class MinimalPublisher : public rclcpp::Node {
     builtin_interfaces::msg::Time stamp(stamp_now);
     time_t measure_time = stamp.sec;
     auto local_sec_str = TimeUtil::GetLocalTimeFromSec(measure_time);
+    // here get a logger with name
     RCLCPP_INFO(
-        this->get_logger(),
+        rclcpp::get_logger("test_for_logger"),
         "Publishing: '%s', date: %s.%09ld UTC, epoch: %ld ms",
+        message.data.c_str(), local_sec_str.c_str(), (long)stamp.nanosec,
+        TimeUtil::timespec2ms((time_t)stamp.sec, (int64_t)stamp.nanosec));
+    // here get default log
+    RCLCPP_INFO(
+        get_logger(), "Publishing: '%s', date: %s.%09ld UTC, epoch: %ld ms",
         message.data.c_str(), local_sec_str.c_str(), (long)stamp.nanosec,
         TimeUtil::timespec2ms((time_t)stamp.sec, (int64_t)stamp.nanosec));
     publisher_->publish(message);
