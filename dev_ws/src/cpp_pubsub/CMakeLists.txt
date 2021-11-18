@@ -17,6 +17,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
 add_executable(talker src/publisher_member_function.cpp)
 ament_target_dependencies(talker rclcpp std_msgs)
 
@@ -27,5 +29,9 @@ install(TARGETS
         talker
         listener
         DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY
+        launch
+        DESTINATION share/${PROJECT_NAME}/
+        )
 
 ament_package()

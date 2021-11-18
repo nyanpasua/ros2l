@@ -17,31 +17,37 @@
 #include <memory>
 #include <string>
 
+#include "common/time_util.h"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
 using namespace std::chrono_literals;
+using time_util::TimeUtil;
 
 /* This example creates a subclass of Node and uses std::bind() to register a
  * member function as a callback from the timer. */
 
-class MinimalPublisher : public rclcpp::Node
-{
-public:
-  MinimalPublisher()
-  : Node("minimal_publisher"), count_(0)
-  {
+class MinimalPublisher : public rclcpp::Node {
+ public:
+  MinimalPublisher() : Node("minimal_publisher"), count_(0) {
     publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
     timer_ = this->create_wall_timer(
-      500ms, std::bind(&MinimalPublisher::timer_callback, this));
+        500ms, std::bind(&MinimalPublisher::timer_callback, this));
   }
 
-private:
-  void timer_callback()
-  {
+ private:
+  void timer_callback() {
     auto message = std_msgs::msg::String();
     message.data = "Hello, world! " + std::to_string(count_++);
-    RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
+    auto stamp_now = now();
+    builtin_interfaces::msg::Time stamp(stamp_now);
+    time_t measure_time = stamp.sec;
+    auto local_sec_str = TimeUtil::GetLocalTimeFromSec(measure_time);
+    RCLCPP_INFO(
+        this->get_logger(),
+        "Publishing: '%s', date: %s.%09ld UTC, epoch: %ld ms",
+        message.data.c_str(), local_sec_str.c_str(), (long)stamp.nanosec,
+        TimeUtil::timespec2ms((time_t)stamp.sec, (int64_t)stamp.nanosec));
     publisher_->publish(message);
   }
   rclcpp::TimerBase::SharedPtr timer_;
@@ -49,8 +55,7 @@ private:
   size_t count_;
 };
 
-int main(int argc, char * argv[])
-{
+int main(int argc, char* argv[]) {
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalPublisher>());
   rclcpp::shutdown();
